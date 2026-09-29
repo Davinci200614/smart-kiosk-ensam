@@ -3,7 +3,6 @@ import sqlalchemy.orm
 from datetime import datetime
 
 Base = sqlalchemy.orm.declarative_base()
-
 class Produit(Base):
     __tablename__ = 'produit'
     

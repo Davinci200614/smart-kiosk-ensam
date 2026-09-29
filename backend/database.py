@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from  models import Base
+from  backend.models import Base
 
 # Creates a local SQLite database file named 'buvette.db' in the root directory
 DATABASE_URL = "sqlite:///buvette.db"
