@@ -2,7 +2,7 @@
 
 Application Python simulant une **borne de commande interactive** (type McDonald's) couplée à un **système de caisse / suivi cuisine** et à un **module d'analyse financière** pour les gérants de la buvette de l'ENSAM.
 
-| | |
+
 |---|---|
 | **Langage** | Python 3.10+ |
 
