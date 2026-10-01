@@ -5,8 +5,7 @@ Application Python simulant une **borne de commande interactive** (type McDonald
 | | |
 |---|---|
 | **Langage** | Python 3.10+ |
-| **Durée** | 3 semaines |
-| **Équipe** | Groupe de 3 étudiants |
+
 
 ---
 
