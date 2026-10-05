@@ -98,8 +98,3 @@ class KioskApp(ctk.CTk):
             # Change the button temporarily to show success
             self.checkout_btn.configure(text=f"Succès! Cmd #{commande.id}", fg_color="blue")
             self.after(3000, lambda: self.checkout_btn.configure(text="Valider la commande", fg_color="green"))
-
-if __name__ == "__main__":
-    ctk.set_appearance_mode("Dark")
-    app = KioskApp()
-    app.mainloop()

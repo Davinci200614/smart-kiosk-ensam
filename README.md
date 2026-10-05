@@ -102,20 +102,26 @@ Relations : `Commande 1—N LigneCommande N—1 Produit`.
 ## 6. Installation et lancement
 
 ```bash
-# 1. Cloner le dépôt et créer l'environnement virtuel
-python -m venv .venv
-source .venv/bin/activate        # Windows : .venv\Scripts\activate
 
-# 2. Installer les dépendances
-pip install -r requirements.txt
+# 1. run setup.sh (runing the venv + install the dependecies)
+chmod +x setup.sh
+./setup.sh
 
-# 3. Créer la base et injecter les données initiales
+# 2. Créer la base et injecter les données initiales
 python -m backend.seed
 
-# 4. Lancer les modules (depuis la racine du projet)
-python -m frontend.kiosk_ui          # Borne client
-python -m frontend.manager_ui        # Caisse & suivi cuisine
-streamlit run analytics/dashboard.py # Dashboard financier
+# 3. Ouvrir le lanceur graphique (depuis la racine du projet)
+python main.py
+
+# Ou lancer directement un module
+python main.py kiosk                 # Borne client
+python main.py manager               # Caisse & suivi cuisine
+python main.py dashboard             # Dashboard financier
+
+`main.py` charge le fichier `.env` (si présent), configure la connexion SQLAlchemy
+une seule fois, crée les tables manquantes, puis lance l'interface sélectionnée.
+Définissez `DATABASE_URL` dans `.env` pour remplacer la base SQLite locale
+(`sqlite:///buvette.db`).
 ```
 
 ### Dépendances (`requirements.txt`)

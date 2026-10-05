@@ -1,0 +1,12 @@
+customtkinter
+sqlalchemy
+qrcode
+pillow
+pandas
+matplotlib
+plotly
+streamlit
+reportlab
+python-dotenv
+CTkMessagebox
+CTkTable

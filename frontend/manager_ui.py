@@ -93,8 +93,3 @@ class ManagerApp(ctk.CTk):
         
         # Force a refresh right after a button click
         self.load_orders()
-
-if __name__ == "__main__":
-    ctk.set_appearance_mode("Dark")
-    app = ManagerApp()
-    app.mainloop()
