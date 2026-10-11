@@ -25,6 +25,14 @@ STATUS_COLORS = {
 STATUS_FLOW = ORDER_STATUSES
 
 
+def _parse_order_datetime(value: object) -> datetime:
+    if isinstance(value, datetime):
+        return value
+    if isinstance(value, str):
+        return datetime.fromisoformat(value)
+    return datetime.now()
+
+
 class ManagerApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
@@ -185,7 +193,7 @@ class ManagerApp(tk.Tk):
                             for line in order.lignes
                             if line.produit is not None
                         ],
-                        "created": order.date_heure or datetime.utcnow(),
+                        "created": _parse_order_datetime(order.date_heure),
                     }
                     for order in records
                 ]

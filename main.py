@@ -12,16 +12,15 @@ from typing import Callable
 
 from dotenv import load_dotenv
 
-from backend.database import configure_database, init_db
+from backend.seed import seed_produits
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
 
 def initialize_application() -> None:
-    """Load configuration and initialize shared application resources."""
+    """Load configuration and initialize the JSON-backed application resources."""
     load_dotenv(PROJECT_ROOT / ".env")
-    configure_database(os.getenv("DATABASE_URL", "sqlite:///buvette.db"))
-    init_db()
+    seed_produits()
 
 
 def launch_desktop(interface_factory: Callable[[], object]) -> None:

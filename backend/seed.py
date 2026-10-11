@@ -1,9 +1,13 @@
-from backend.database import SessionLocal, init_db
-from backend.models import Produit
+"""Seed the JSON inventory for the kiosk menu."""
 
-def seed_produits():
-    init_db()
-    db = SessionLocal()
+from __future__ import annotations
+
+from backend.models_json import Produit
+from backend.storage_json import load_inventory, save_inventory
+
+
+def seed_produits() -> None:
+    """Populate JSON inventory with the default menu if needed."""
     menu_items = [
         ("Sandwich Bocadillos", "🥪 Sandwiches & Savory Snacks", 28.0),
         ("Sandwich Kefta", "🥪 Sandwiches & Savory Snacks", 32.0),
@@ -28,29 +32,28 @@ def seed_produits():
         ("Bissara", "🍲 Soups & Warm Dishes (Seasonal/Daily)", 15.0),
     ]
 
-    try:
-        for nom, categorie, prix in menu_items:
-            produit = db.query(Produit).filter(Produit.nom == nom).first()
-            if produit is None:
-                produit = Produit(
-                    nom=nom,
-                    categorie=categorie,
-                    prix=prix,
-                    stock_actuel=50,
-                    seuil_alerte=5,
-                )
-                db.add(produit)
-            else:
-                produit.categorie = categorie
-                produit.prix = prix
+    inventory = load_inventory()
+    products_by_name = {product.nom: product for product in inventory}
 
-        db.commit()
-        print(f"Menu products synchronized: {len(menu_items)}")
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
+    for nom, categorie, prix in menu_items:
+        if nom in products_by_name:
+            existing = products_by_name[nom]
+            existing.categorie = categorie
+            existing.prix = prix
+        else:
+            products_by_name[nom] = Produit(
+                id=max((product.id for product in inventory), default=0) + 1,
+                nom=nom,
+                categorie=categorie,
+                prix=prix,
+                stock_actuel=50,
+                seuil_alerte=5,
+            )
+            inventory.append(products_by_name[nom])
+
+    save_inventory(inventory)
+    print(f"Menu products synchronized: {len(menu_items)}")
+
 
 if __name__ == "__main__":
     seed_produits()

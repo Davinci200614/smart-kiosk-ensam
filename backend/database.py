@@ -1,31 +1,40 @@
-from sqlalchemy import Engine, create_engine
-from sqlalchemy.orm import sessionmaker
+"""Compatibility layer for the JSON-backed application.
 
-from backend.models import Base
+The project is intentionally configured to use JSON persistence. This module keeps
+legacy code working when older UI entry points still call SessionLocal() and
+configure_database().
+"""
 
-DEFAULT_DATABASE_URL = "sqlite:///buvette.db"
+from __future__ import annotations
 
-engine: Engine | None = None
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+DEFAULT_DATABASE_URL = "json://local"
+
+
+class JSONSession:
+    """Minimal no-op context manager used by the legacy UI layer."""
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def close(self) -> None:
+        return None
+
+
+SessionLocal = JSONSession
 
 
 def configure_database(database_url: str = DEFAULT_DATABASE_URL) -> None:
-    """Configure the shared engine and session factory for the application."""
-    global engine, SessionLocal
-
-    if engine is not None:
-        engine.dispose()
-    engine = create_engine(database_url, echo=False)
-    SessionLocal.configure(bind=engine)
+    """Legacy compatibility shim for the JSON-only backend."""
+    return None
 
 
-def init_db():
-    """Generates all tables mapped in models.py if they don't already exist."""
-    if engine is None:
-        configure_database()
-    assert engine is not None
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created successfully.")
+def init_db() -> None:
+    """Legacy compatibility shim for the JSON-only backend."""
+    return None
+
 
 if __name__ == "__main__":
     init_db()
