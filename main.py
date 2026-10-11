@@ -10,15 +10,18 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Callable
 
+from dotenv import load_dotenv
+
+from backend.database import configure_database, init_db
+
 PROJECT_ROOT = Path(__file__).resolve().parent
 
 
 def initialize_application() -> None:
-    """Load configuration for the JSON-backed application."""
-    from backend.storage_json import DATA_DIR
-
-    if not DATA_DIR.is_dir():
-        raise FileNotFoundError(f"JSON data directory not found: {DATA_DIR}")
+    """Load configuration and initialize shared application resources."""
+    load_dotenv(PROJECT_ROOT / ".env")
+    configure_database(os.getenv("DATABASE_URL", "sqlite:///buvette.db"))
+    init_db()
 
 
 def launch_desktop(interface_factory: Callable[[], object]) -> None:
@@ -38,7 +41,7 @@ def launch_dashboard() -> None:
 
     try:
         subprocess.run(
-            [sys.executable, "-m", "streamlit", "run", str(dashboard_path)],
+            ["streamlit", "run", str(dashboard_path)],
             cwd=PROJECT_ROOT,
             check=True,
         )
@@ -49,22 +52,12 @@ def launch_dashboard() -> None:
         ) from error
 
 
-def launch_process(
-    interface: str,
-    manager_username: str | None = None,
-    manager_role: str | None = None,
-) -> None:
+def launch_process(interface: str) -> None:
     """Launch a module from the graphical launcher."""
     try:
-        environment = os.environ.copy()
-        if manager_username is not None:
-            environment["SMART_KIOSK_MANAGER"] = manager_username
-        if manager_role is not None:
-            environment["SMART_KIOSK_MANAGER_ROLE"] = manager_role
         subprocess.Popen(
             [sys.executable, str(PROJECT_ROOT / "main.py"), interface],
             cwd=PROJECT_ROOT,
-            env=environment,
         )
     except OSError as error:
         raise RuntimeError(f"Unable to launch the {interface} module.") from error
@@ -121,59 +114,9 @@ def launch_graphical_menu() -> None:
 
         def open_module(self, interface: str) -> None:
             try:
-                if interface in {"manager", "dashboard"}:
-                    credentials = self.authenticate_manager()
-                    if credentials is None:
-                        return
-                    launch_process(interface, *credentials)
-                else:
-                    launch_process(interface)
+                launch_process(interface)
             except RuntimeError as error:
                 messagebox.showerror("Erreur de lancement", str(error))
-
-        def authenticate_manager(self) -> str | None:
-            from backend.auth_json import verify_user
-
-            login = ctk.CTkToplevel(self)
-            login.title("Accès manager")
-            login.geometry("360x280")
-            login.transient(self)
-            login.grab_set()
-            result = {"credentials": None}
-
-            ctk.CTkLabel(
-                login,
-                text="Connexion manager",
-                font=("Arial", 22, "bold"),
-            ).pack(pady=(25, 15))
-            username_entry = ctk.CTkEntry(login, placeholder_text="Nom utilisateur")
-            username_entry.pack(padx=35, pady=8, fill="x")
-            password_entry = ctk.CTkEntry(
-                login,
-                placeholder_text="Mot de passe",
-                show="*",
-            )
-            password_entry.pack(padx=35, pady=8, fill="x")
-            error_label = ctk.CTkLabel(login, text="", text_color="#ef4444")
-            error_label.pack(pady=4)
-
-            def submit() -> None:
-                username = username_entry.get().strip()
-                user = verify_user(username, password_entry.get())
-                if user is not None:
-                    result["credentials"] = (user.nom_utilisateur, user.role)
-                    login.destroy()
-                else:
-                    error_label.configure(text="Identifiants manager invalides.")
-
-            ctk.CTkButton(login, text="Se connecter", command=submit).pack(
-                padx=35,
-                pady=12,
-                fill="x",
-            )
-            password_entry.bind("<Return>", lambda _event: submit())
-            self.wait_window(login)
-            return result["credentials"]
 
     LauncherApp().mainloop()
 
@@ -198,17 +141,13 @@ def main(argv: Sequence[str] | None = None) -> None:
     if args.interface is None:
         launch_graphical_menu()
     elif args.interface == "kiosk":
-        from frontend.kiosk_ui import KioskApp
+        from frontend.kiosk import KioskApp
 
         launch_desktop(KioskApp)
     elif args.interface == "manager":
-        from frontend.manager_ui import ManagerApp
+        from frontend.kds import ManagerApp
 
-        manager_username = os.getenv("SMART_KIOSK_MANAGER")
-        manager_role = os.getenv("SMART_KIOSK_MANAGER_ROLE")
-        if manager_username is None:
-            raise RuntimeError("Manager authentication is required from the launcher.")
-        launch_desktop(lambda: ManagerApp(manager_username, manager_role or "Manager"))
+        launch_desktop(ManagerApp)
     else:
         launch_dashboard()
 
