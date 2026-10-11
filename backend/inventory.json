@@ -1,28 +1,190 @@
 [
   {
-    "id": 1,
+    "id": 4,
+    "nom": "Sandwich Bocadillos",
+    "categorie": "🍽️ Plats",
+    "prix": 28.0,
+    "stock_actuel": 47,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 5,
+    "nom": "Sandwich Kefta",
+    "categorie": "🍽️ Plats",
+    "prix": 32.0,
+    "stock_actuel": 44,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 6,
+    "nom": "Sandwich Poulet Pané / Grillé",
+    "categorie": "🍽️ Plats",
+    "prix": 30.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 7,
+    "nom": "Sandwich Merguez",
+    "categorie": "🍽️ Plats",
+    "prix": 30.0,
+    "stock_actuel": 45,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 8,
+    "nom": "Msemen Farcie",
+    "categorie": "🍽️ Plats",
+    "prix": 22.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 9,
+    "nom": "Harcha Farcie",
+    "categorie": "🍽️ Plats",
+    "prix": 18.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 10,
+    "nom": "Msemen (Plain)",
+    "categorie": "🍰 Pâtisseries",
+    "prix": 8.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 11,
+    "nom": "Harcha (Plain)",
+    "categorie": "🍰 Pâtisseries",
+    "prix": 8.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 12,
+    "nom": "Baghrir",
+    "categorie": "🍰 Pâtisseries",
+    "prix": 8.0,
+    "stock_actuel": 46,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 13,
+    "nom": "Croissants & Pain au Chocolat",
+    "categorie": "🍰 Pâtisseries",
+    "prix": 10.0,
+    "stock_actuel": 46,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 14,
+    "nom": "Thé à la Menthe (Moroccan Mint Tea)",
+    "categorie": "🥤 Boissons",
+    "prix": 10.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 15,
+    "nom": "Thé à la Louiza",
+    "categorie": "🥤 Boissons",
+    "prix": 10.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 16,
+    "nom": "Café au Lait",
+    "categorie": "🥤 Boissons",
+    "prix": 12.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 17,
+    "nom": "Jus d'Avocat au Lait",
+    "categorie": "🥤 Boissons",
+    "prix": 22.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 18,
+    "nom": "Jus d'Orange",
+    "categorie": "🥤 Boissons",
+    "prix": 15.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 19,
+    "nom": "Jus Panaché",
+    "categorie": "🥤 Boissons",
+    "prix": 20.0,
+    "stock_actuel": 44,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 20,
+    "nom": "Rayeb (Lben)",
+    "categorie": "🥤 Boissons",
+    "prix": 12.0,
+    "stock_actuel": 46,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 21,
+    "nom": "Mineral Water & Soft Drinks",
+    "categorie": "🥤 Boissons",
+    "prix": 10.0,
+    "stock_actuel": 50,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 22,
+    "nom": "Harira",
+    "categorie": "🍽️ Plats",
+    "prix": 18.0,
+    "stock_actuel": 49,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 23,
+    "nom": "Bissara",
+    "categorie": "🍽️ Plats",
+    "prix": 15.0,
+    "stock_actuel": 49,
+    "seuil_alerte": 5,
+    "image_path": null
+  },
+  {
+    "id": 24,
     "nom": "Café Noir",
-    "categorie": "Boissons",
-    "prix": 5.0,
-    "stock_actuel": 43,
-    "seuil_alerte": 10,
-    "image_path": null
-  },
-  {
-    "id": 2,
-    "nom": "Thé à la Menthe",
-    "categorie": "Boissons",
-    "prix": 3.0,
-    "stock_actuel": 87,
-    "seuil_alerte": 20,
-    "image_path": null
-  },
-  {
-    "id": 3,
-    "nom": "Panini Poulet",
-    "categorie": "Sandwichs",
-    "prix": 25.0,
-    "stock_actuel": 17,
+    "categorie": "🥤 Boissons",
+    "prix": 10.0,
+    "stock_actuel": 50,
     "seuil_alerte": 5,
     "image_path": null
   }

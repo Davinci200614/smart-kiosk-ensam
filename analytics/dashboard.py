@@ -36,6 +36,7 @@ EXPECTED_COLUMNS = [
     "Line Total",
     "Status",
 ]
+ARCHIVED_CATEGORY = "Archived products"
 
 
 def get_dashboard_data() -> pd.DataFrame:
@@ -56,8 +57,12 @@ def get_dashboard_data() -> pd.DataFrame:
             {
                 "Order ID": ligne.commande_id,
                 "Date": commande.date_heure if commande else None,
-                "Product": produit.nom if produit else f"Produit #{ligne.produit_id}",
-                "Category": produit.categorie if produit else "Unknown",
+                "Product": (
+                    produit.nom
+                    if produit
+                    else f"Produit archivé #{ligne.produit_id}"
+                ),
+                "Category": produit.categorie if produit else ARCHIVED_CATEGORY,
                 "Quantity": ligne.quantite,
                 "Unit Price": ligne.prix_unitaire,
                 "Line Total": ligne.quantite * ligne.prix_unitaire,

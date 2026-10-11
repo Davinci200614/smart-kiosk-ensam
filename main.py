@@ -117,6 +117,8 @@ def launch_graphical_menu() -> None:
                 command=self.destroy,
                 fg_color="transparent",
                 border_width=1,
+                text_color=("#1f2937", "#f3f4f6"),
+                hover_color=("#d1d5db", "#374151"),
             ).grid(row=2, column=0, padx=100, pady=(10, 30), sticky="ew")
 
         def open_module(self, interface: str) -> None:
