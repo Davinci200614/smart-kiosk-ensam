@@ -4,7 +4,7 @@
     "nom": "Café Noir",
     "categorie": "Boissons",
     "prix": 5.0,
-    "stock_actuel": 45,
+    "stock_actuel": 43,
     "seuil_alerte": 10,
     "image_path": null
   },
@@ -13,7 +13,7 @@
     "nom": "Thé à la Menthe",
     "categorie": "Boissons",
     "prix": 3.0,
-    "stock_actuel": 90,
+    "stock_actuel": 87,
     "seuil_alerte": 20,
     "image_path": null
   },
@@ -22,7 +22,7 @@
     "nom": "Panini Poulet",
     "categorie": "Sandwichs",
     "prix": 25.0,
-    "stock_actuel": 0,
+    "stock_actuel": 17,
     "seuil_alerte": 5,
     "image_path": null
   }

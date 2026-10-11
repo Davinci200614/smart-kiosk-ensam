@@ -207,6 +207,22 @@
       "total": 25.0,
       "mode_paiement": "Espèces",
       "qr_code_path": null
+    },
+    {
+      "id": 27,
+      "date_heure": "2026-10-11T15:46:25",
+      "statut": "Servie",
+      "total": 13.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_27.png"
+    },
+    {
+      "id": 28,
+      "date_heure": "2026-10-11T15:59:59",
+      "statut": "Servie",
+      "total": 81.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_28.png"
     }
   ],
   "lignes": [
@@ -425,6 +441,34 @@
       "commande_id": 26,
       "produit_id": 3,
       "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 32,
+      "commande_id": 27,
+      "produit_id": 1,
+      "quantite": 2,
+      "prix_unitaire": 5.0
+    },
+    {
+      "id": 33,
+      "commande_id": 27,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 34,
+      "commande_id": 28,
+      "produit_id": 2,
+      "quantite": 2,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 35,
+      "commande_id": 28,
+      "produit_id": 3,
+      "quantite": 3,
       "prix_unitaire": 25.0
     }
   ]

@@ -103,7 +103,7 @@ Ce projet vise à concevoir une application complète permettant :
 
 Les modèles de [`backend/models_json.py`](backend/models_json.py) sont convertis
 en dictionnaires avant d'être écrits par [`backend/storage_json.py`](backend/storage_json.py).
-Les tickets QR sont générés dans `backend/qrcodes/`.
+Les tickets QR sont générés dans `qrcodes/` à la racine du projet.
 
 ## 6. Installation et lancement
 
@@ -168,7 +168,7 @@ Légende : ✅ fait · 🟡 partiel · ❌ à faire
 | Données initiales (seed) | ✅ | Inventaire initial chargé dans `inventory.json` |
 | Création de commande | ✅ | Lignes, total et persistance dans `transactions.json` |
 | Décrémentation automatique du stock | ✅ | Vérification du stock disponible avant l'écriture |
-| Génération du QR Code | ✅ | Ticket enregistré dans `backend/qrcodes/` et chemin sauvegardé |
+| Génération du QR Code | ✅ | Ticket enregistré dans `qrcodes/` et chemin sauvegardé |
 | Gestion des utilisateurs (Admin / Caissier) | ✅ | Authentification JSON des managers |
 | Gestion des erreurs et cas limites | 🟡 | Erreurs métier gérées, couverture de tests à renforcer |
 

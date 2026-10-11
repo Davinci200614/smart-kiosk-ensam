@@ -12,7 +12,7 @@ from backend.storage_json import (
     save_transactions,
 )
 
-QR_CODES_DIR = Path(__file__).resolve().parent / "qrcodes"
+QR_CODES_DIR = Path(__file__).resolve().parent.parent / "qrcodes"
 
 
 def create_commande(

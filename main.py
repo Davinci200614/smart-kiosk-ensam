@@ -38,7 +38,7 @@ def launch_dashboard() -> None:
 
     try:
         subprocess.run(
-            ["streamlit", "run", str(dashboard_path)],
+            [sys.executable, "-m", "streamlit", "run", str(dashboard_path)],
             cwd=PROJECT_ROOT,
             check=True,
         )
