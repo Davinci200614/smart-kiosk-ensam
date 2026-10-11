@@ -1,131 +1,122 @@
 # Smart Kiosk & Management System — Buvette ENSAM
 
-Application Python simulant une **borne de commande interactive** (type McDonald's) couplée à un **système de caisse / suivi cuisine** et à un **module d'analyse financière** pour les gérants de la buvette de l'ENSAM.
+Application Python pour gérer une borne de commande autonome, le suivi des commandes côté cuisine/caisse et un tableau de bord financier pour la buvette de l'ENSAM.
 
+Le projet combine :
+- une interface client tactile,
+- un écran gestionnaire pour la cuisine et la caisse,
+- un moteur de persistance basé sur des fichiers JSON,
+- un tableau de bord analytique avec Streamlit.
 
+## Objectif
 
-| **Langage** | Python 3.10+ |
+La buvette accueille de nombreux clients pendant les pauses. Le projet vise à réduire les files d'attente, centraliser la gestion des commandes et offrir un suivi rapide des ventes et des stocks.
 
+## Stack technique
 
----
+- Python 3
+- CustomTkinter pour les interfaces graphiques
+- Streamlit + Plotly pour le dashboard
+- JSON comme stockage local
+- qrcode + Pillow pour les tickets QR
+- pandas pour le traitement des données
 
-## 1. Contexte et objectifs
+## Structure du projet
 
-La buvette de l'ENSAM fait face à une forte affluence lors des pauses, ce qui génère de longues files d'attente et une gestion complexe des stocks et de la caisse.
-
-Ce projet vise à concevoir une application complète permettant :
-
-- aux clients de commander eux-mêmes via une borne tactile ;
-- au personnel de suivre et servir les commandes en direct ;
-- aux gérants de piloter les stocks et d'analyser le chiffre d'affaires.
-
-## 2. Architecture
-
-```
-┌─────────────────────┐      ┌──────────────────────────┐
-│  Borne Client       │      │  Caisse & Cuisine        │
-│  (Kiosk UI)         │      │  (Manager UI / KDS)      │
-└─────────┬───────────┘      └────────────┬─────────────┘
-          │                               │
-          └───────────┐   ┌───────────────┘
-                      ▼   ▼
-              ┌─────────────────┐       ┌──────────────────────┐
-              │ Fichiers JSON   │◄──────│ Analytics & Rapports │
-              │ (storage_json)  │       │ (Streamlit / Plotly) │
-              └─────────────────┘       └──────────────────────┘
-```
-
-### Arborescence cible
-
-```
+```text
 .
-├── main.py                  # Point d'entrée (menu de lancement des modules)
-├── requirements.txt
-├── setup.sh                 # Installation et lancement en une commande
+├── main.py                  # Point d'entrée principal
+├── setup.sh                 # Script d'installation et de lancement
+├── run.sh                   # Variante locale de lancement
+├── requirements.txt         # Dépendances Python
 ├── backend/
-│   ├── models_json.py       # Modèles Python sérialisables en JSON
-│   ├── storage_json.py      # Lecture/écriture des données JSON
-│   ├── crud.py              # Création des commandes et tickets QR
-│   ├── auth_json.py         # Authentification des managers
-│   ├── seed.py              # Données initiales de l'inventaire
-│   ├── inventory.json       # Produits et stocks
-│   ├── transactions.json    # Commandes et lignes de commande
-│   └── user.json            # Utilisateurs
+│   ├── __init__.py
+│   ├── auth_json.py         # Authentification manager
+│   ├── crud.py              # Logique de commande et gestion des transactions
+│   ├── inventory.json       # Stock du catalogue
+│   ├── models_json.py       # Modèles de données
+│   ├── refill_requests.json # Demandes de réapprovisionnement
+│   ├── seed.py              # Initialisation du menu par défaut
+│   ├── storage_json.py      # Lecture/écriture JSON
+│   ├── transactions.json    # Historique des commandes
+│   └── user.json            # Utilisateurs et accès
 ├── frontend/
-│   ├── kiosk_ui.py          # Borne client
-│   └── manager_ui.py        # Caisse & suivi cuisine
+│   ├── __init__.py
+│   ├── kiosk.py             # Interface borne client
+│   ├── kds.py               # Interface caisse / cuisine
+│   └── moroccan_buvette_menu.md
 ├── analytics/
-│   └── dashboard.py         # Dashboard financier + exports
-├── assets/                  # Images produits
-└── qrcodes/                 # Tickets générés
+│   └── dashboard.py         # Tableau de bord financier
+├── venv/                    # Environnement virtuel local
+├── .gitignore
+└── README.md
 ```
 
-## 3. Modules fonctionnels
+## Fonctionnalités
 
-### 3.1 Module 1 — Borne client (Kiosk)
+### 1. Borne client
+- navigation dans les catégories de produits,
+- ajout et suppression d'articles dans le panier,
+- calcul du total en temps réel,
+- sélection du mode de paiement,
+- confirmation de commande et génération de ticket.
 
-- **Catalogue interactif** : navigation par catégories (*Boissons, Snacks, Sandwichs, Desserts*) avec affichage des images et des prix.
-- **Panier dynamique** : ajout, ajustement des quantités et suppression d'articles, avec calcul du total en temps réel.
-- **Passage de commande** : choix du mode de paiement (*Espèces au guichet*, *Carte / Solde étudiant*) puis validation.
-- **Génération du billet** : affichage d'un numéro de commande clair et d'un **QR Code unique** pour le retrait.
+### 2. Gestion caisse / cuisine
+- affichage des commandes en cours,
+- suivi des statuts de commande,
+- gestion des stocks après validation,
+- vue adaptée au personnel de cuisine et de caisse.
 
-### 3.2 Module 2 — Interface Caisse & Suivi Cuisine (KDS)
+### 3. Dashboard analytique
+- visualisation du chiffre d'affaires,
+- analyse des ventes par période,
+- suivi des produits les plus demandés,
+- export et consultation des données via Streamlit.
 
-- **Suivi en direct** : affichage automatique des nouvelles commandes avec changement de statut :
-  `En attente → En préparation → Prête → Servie`
-- **Scan / Validation** : validation des commandes servies via leur numéro ou par scan du QR Code.
-- **Gestion du stock** : décrémentation automatique après achat et **alertes visuelles** lorsque le seuil critique est atteint.
+## Démarrage rapide
 
-### 3.3 Module 3 — Analytics & Rapports financiers
-
-- **Tableau de bord** : chiffre d'affaires par jour / par heure, analyse des périodes de pointe, produits les plus vendus.
-- **Exportation** : génération automatique de bilans financiers en **PDF** et **CSV**.
-
-## 4. Stack technologique
-
-| Composant | Technologie | Rôle |
-|---|---|---|
-| Langage | Python 3.10+ | Cœur du projet |
-| Interface graphique | CustomTkinter | Borne client, caisse et suivi cuisine |
-| Dashboard analytics | Streamlit / Plotly | Visualisation fluide des données financières |
-| Persistance | Fichiers JSON | Stockage local de l'inventaire, des commandes et des utilisateurs |
-| QR Code | `qrcode` & `Pillow` | Création des QR Codes des tickets |
-| Analyse de données | `pandas` | Traitement et agrégation des données financières |
-
-## 5. Fichiers de données JSON
-
-| Fichier | Contenu |
-|---|---|
-| `inventory.json` | Produits, catégories, prix, stock et seuils d'alerte |
-| `transactions.json` | Commandes et lignes de commande |
-| `user.json` | Utilisateurs managers et mots de passe hachés |
-| `refill_requests.json` | Demandes de réapprovisionnement |
-
-Les modèles de [`backend/models_json.py`](backend/models_json.py) sont convertis
-en dictionnaires avant d'être écrits par [`backend/storage_json.py`](backend/storage_json.py).
-Les tickets QR sont générés dans `qrcodes/` à la racine du projet.
-
-## 6. Installation et lancement
+### Option 1 : script d'installation automatique
 
 ```bash
-
-# Préparer l'environnement, initialiser les données JSON et ouvrir le lanceur
 chmod +x setup.sh
 ./setup.sh
-
-# Ou lancer directement une interface (la venv est utilisée automatiquement)
-./setup.sh kiosk                 # Borne client
-./setup.sh manager               # Caisse & suivi cuisine
-./setup.sh dashboard             # Dashboard financier
 ```
 
-`setup.sh` crée `venv/` si nécessaire, installe les dépendances, initialise
-`backend/inventory.json`, puis exécute `main.py` avec l'interpréteur de la
-machine virtuelle. Il n'est donc pas nécessaire d'activer la venv séparément.
+Le script :
+1. crée un environnement virtuel local dans `venv/`,
+2. installe les dépendances du projet,
+3. initialise les fichiers JSON,
+4. lance l'application.
 
-### Dépendances (`requirements.txt`)
+### Option 2 : lancement manuel
 
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python main.py
 ```
+
+### Lancement direct d'une interface
+
+```bash
+python main.py kiosk
+python main.py manager
+python main.py dashboard
+```
+
+## Fichiers de données
+
+Les données de l'application sont stockées localement dans le dossier `backend` :
+
+- `inventory.json` : catalogue, prix, stock et seuils
+- `transactions.json` : commandes et détails
+- `user.json` : comptes et accès manager
+- `refill_requests.json` : demandes de réapprovisionnement
+
+## Dépendances
+
+```bash
 customtkinter
 qrcode
 pillow
@@ -134,92 +125,18 @@ plotly
 streamlit
 ```
 
-## 7. Répartition des tâches
+## État du projet
 
-| Membre | Rôle | Sem. 1 | Sem. 2 | Sem. 3 |
-|---|---|---|---|---|
-| **1** | Frontend client (borne tactile) | Maquettage UI/UX, catalogue interactif | Panier dynamique, quantités, récapitulatif | Confirmation, QR Code, intégration JSON |
-| **2** | Backend, données & logique métier | Modèles JSON, données initiales | CRUD, stocks, commandes, transactions | Synchronisation borne-caisse, erreurs, cas limites |
-| **3** | Caisse, cuisine & module financier | Écran Suivi Cuisine, statuts | Administration des stocks, seuils d'alerte | Dashboard financier, pandas/Plotly, rapports |
+Le projet est un prototype fonctionnel en cours de développement. Les blocs principaux sont en place : initialisation du menu, génération de commandes, stockage des données, lancement des interfaces, et dashboard analytique. Certaines fonctionnalités peuvent encore être améliorées et complétées selon les besoins du projet.
 
-## 8. Planning prévisionnel
+## Prochaines améliorations possibles
 
-| Période | Objectifs |
-|---|---|
-| **Semaine 1** | Modèles JSON, maquettes UI Borne & Caisse, structure du projet |
-| **Semaine 2** | Connexion Borne-inventaire JSON, décrémentation du stock, écran Suivi Cuisine |
-| **Semaine 3** | Dashboard financier, génération QR/PDF, tests d'intégration, soutenance |
+- améliorer le flux complet de paiement et la validation client,
+- finaliser la gestion de l'état des commandes,
+- renforcer les alertes sur les seuils de stock,
+- enrichir les rapports financiers et les exports,
+- nettoyer et stabiliser les interactions UI.
 
-### Jalons de livraison
+## Contribution
 
-1. **Fin semaine 1** : stockage JSON fonctionnel et maquettes UI validées.
-2. **Fin semaine 2** : parcours de commande complet (de la sélection au suivi en cuisine).
-3. **Fin semaine 3** : projet finalisé et testé, tableaux de bord et support de présentation prêts.
-
-## 9. État d'avancement (prototype actuel)
-
-Légende : ✅ fait · 🟡 partiel · ❌ à faire
-
-### Base de données et backend
-
-| Exigence | État | Remarque |
-|---|---|---|
-| Modèles et stockage JSON | ✅ | Inventaire, transactions, utilisateurs et demandes de réapprovisionnement |
-| Données initiales (seed) | ✅ | Inventaire initial chargé dans `inventory.json` |
-| Création de commande | ✅ | Lignes, total et persistance dans `transactions.json` |
-| Décrémentation automatique du stock | ✅ | Vérification du stock disponible avant l'écriture |
-| Génération du QR Code | ✅ | Ticket enregistré dans `qrcodes/` et chemin sauvegardé |
-| Gestion des utilisateurs (Admin / Caissier) | ✅ | Authentification JSON des managers |
-| Gestion des erreurs et cas limites | 🟡 | Erreurs métier gérées, couverture de tests à renforcer |
-
-### Module 1 — Borne client
-
-| Exigence | État | Remarque |
-|---|---|---|
-| Navigation par catégories | ❌ | Liste unique de boutons |
-| Affichage des images produits | ❌ | `image_path` jamais utilisé |
-| Ajout au panier + total en temps réel | ✅ | |
-| Ajustement des quantités / suppression | ❌ | Ajout uniquement |
-| Choix du mode de paiement | ❌ | « Espèces » codé en dur |
-| Numéro de commande + QR Code affichés | ❌ | Numéro visible 3 s sur le bouton, pas de ticket |
-
-### Module 2 — Caisse & Cuisine (KDS)
-
-| Exigence | État | Remarque |
-|---|---|---|
-| Affichage automatique des commandes | ✅ | Rafraîchissement toutes les 5 s, sans scintillement |
-| Statuts En attente / En préparation / Servie | ✅ | |
-| Statut « Prête » | ❌ | Passage direct de *En préparation* à *Servie* |
-| Validation par numéro ou scan QR | ❌ | |
-| Administration des stocks | ❌ | Aucune interface |
-| Alertes visuelles sur seuil critique | ❌ | `seuil_alerte` jamais exploité |
-
-### Module 3 — Analytics
-
-| Exigence | État | Remarque |
-|---|---|---|
-| Dashboard (CA par jour/heure, pointes, top produits) | 🟡 | Dashboard Streamlit connecté aux transactions JSON |
-| Export PDF / CSV | ❌ | |
-
-### Projet
-
-| Exigence | État | Remarque |
-|---|---|---|
-| `requirements.txt` | ✅ | Dépendances de l'application déclarées |
-| `main.py` | ✅ | Lanceur graphique et lancement direct des interfaces |
-| `setup.sh` | ✅ | Installation, seed JSON et lancement en une commande |
-| Tests d'intégration | ❌ | |
-
-## 10. Pistes d'amélioration identifiées
-
-- Retirer `*.png` et `*.pdf` du `.gitignore` pour ne pas exclure les images produits (ou ignorer uniquement `qrcodes/`).
-- Remplacer le contenu du QR Code (statut figé à la création) par un identifiant exploitable au scan, par exemple `ENSAM-CMD-<id>`.
-- Remplacer `datetime.utcnow` par un horodatage timezone-aware (heure du Maroc) pour des statistiques horaires correctes.
-- Supprimer le contournement `self.panier.append(None)` dans `KioskApp.checkout`.
-- Utiliser les prix de la base (et non ceux du panier en mémoire) pour calculer le total dans `create_commande`.
-
-## 11. Livrables attendus
-
-- Application fonctionnelle (borne, caisse/cuisine, dashboard).
-- Bilans financiers exportables (PDF et CSV).
-- Support de présentation pour la soutenance.
+Ce projet est conçu pour servir de base de démonstration et de prototype de système de buvette intelligente. Les contributions sont bienvenues pour améliorer le parcours client, la logique métier et le tableau de bord analytique.
