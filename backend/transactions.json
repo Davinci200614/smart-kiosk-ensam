@@ -1,0 +1,431 @@
+{
+  "commandes": [
+    {
+      "id": 1,
+      "date_heure": "2026-10-10T23:21:48",
+      "statut": "Servie",
+      "total": 33.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 2,
+      "date_heure": "2026-10-10T23:32:59",
+      "statut": "Servie",
+      "total": 5.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 3,
+      "date_heure": "2026-10-10T23:33:04",
+      "statut": "Servie",
+      "total": 3.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 4,
+      "date_heure": "2026-10-10T23:33:12",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 5,
+      "date_heure": "2026-10-10T23:33:14",
+      "statut": "Servie",
+      "total": 3.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 6,
+      "date_heure": "2026-10-10T23:33:28",
+      "statut": "Servie",
+      "total": 3.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 7,
+      "date_heure": "2026-10-10T23:33:29",
+      "statut": "Servie",
+      "total": 3.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 8,
+      "date_heure": "2026-10-10T23:33:35",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 9,
+      "date_heure": "2026-10-10T23:33:35",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 10,
+      "date_heure": "2026-10-10T23:33:36",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 11,
+      "date_heure": "2026-10-10T23:33:36",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 12,
+      "date_heure": "2026-10-10T23:33:37",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 13,
+      "date_heure": "2026-10-10T23:33:38",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 14,
+      "date_heure": "2026-10-10T23:33:39",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 15,
+      "date_heure": "2026-10-10T23:33:42",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 16,
+      "date_heure": "2026-10-10T23:33:44",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 17,
+      "date_heure": "2026-10-10T23:33:44",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 18,
+      "date_heure": "2026-10-10T23:33:46",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 19,
+      "date_heure": "2026-10-10T23:33:47",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 20,
+      "date_heure": "2026-10-10T23:33:48",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 21,
+      "date_heure": "2026-10-10T23:33:48",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 22,
+      "date_heure": "2026-10-11T00:04:21",
+      "statut": "Servie",
+      "total": 8.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 23,
+      "date_heure": "2026-10-11T00:04:29",
+      "statut": "Servie",
+      "total": 9.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 24,
+      "date_heure": "2026-10-11T00:07:00",
+      "statut": "Servie",
+      "total": 83.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 25,
+      "date_heure": "2026-10-11T00:17:26",
+      "statut": "Servie",
+      "total": 5.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    },
+    {
+      "id": 26,
+      "date_heure": "2026-10-11T00:17:32",
+      "statut": "Servie",
+      "total": 25.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": null
+    }
+  ],
+  "lignes": [
+    {
+      "id": 1,
+      "commande_id": 1,
+      "produit_id": 1,
+      "quantite": 1,
+      "prix_unitaire": 5.0
+    },
+    {
+      "id": 2,
+      "commande_id": 1,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 3,
+      "commande_id": 1,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 4,
+      "commande_id": 2,
+      "produit_id": 1,
+      "quantite": 1,
+      "prix_unitaire": 5.0
+    },
+    {
+      "id": 5,
+      "commande_id": 3,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 6,
+      "commande_id": 4,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 7,
+      "commande_id": 5,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 8,
+      "commande_id": 6,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 9,
+      "commande_id": 7,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 10,
+      "commande_id": 8,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 11,
+      "commande_id": 9,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 12,
+      "commande_id": 10,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 13,
+      "commande_id": 11,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 14,
+      "commande_id": 12,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 15,
+      "commande_id": 13,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 16,
+      "commande_id": 14,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 17,
+      "commande_id": 15,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 18,
+      "commande_id": 16,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 19,
+      "commande_id": 17,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 20,
+      "commande_id": 18,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 21,
+      "commande_id": 19,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 22,
+      "commande_id": 20,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 23,
+      "commande_id": 21,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 24,
+      "commande_id": 22,
+      "produit_id": 1,
+      "quantite": 1,
+      "prix_unitaire": 5.0
+    },
+    {
+      "id": 25,
+      "commande_id": 22,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 26,
+      "commande_id": 23,
+      "produit_id": 2,
+      "quantite": 3,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 27,
+      "commande_id": 24,
+      "produit_id": 3,
+      "quantite": 3,
+      "prix_unitaire": 25.0
+    },
+    {
+      "id": 28,
+      "commande_id": 24,
+      "produit_id": 2,
+      "quantite": 1,
+      "prix_unitaire": 3.0
+    },
+    {
+      "id": 29,
+      "commande_id": 24,
+      "produit_id": 1,
+      "quantite": 1,
+      "prix_unitaire": 5.0
+    },
+    {
+      "id": 30,
+      "commande_id": 25,
+      "produit_id": 1,
+      "quantite": 1,
+      "prix_unitaire": 5.0
+    },
+    {
+      "id": 31,
+      "commande_id": 26,
+      "produit_id": 3,
+      "quantite": 1,
+      "prix_unitaire": 25.0
+    }
+  ]
+}

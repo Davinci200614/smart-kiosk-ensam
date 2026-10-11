@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "nom": "Café Noir",
+    "categorie": "Boissons",
+    "prix": 5.0,
+    "stock_actuel": 45,
+    "seuil_alerte": 10,
+    "image_path": null
+  },
+  {
+    "id": 2,
+    "nom": "Thé à la Menthe",
+    "categorie": "Boissons",
+    "prix": 3.0,
+    "stock_actuel": 90,
+    "seuil_alerte": 20,
+    "image_path": null
+  },
+  {
+    "id": 3,
+    "nom": "Panini Poulet",
+    "categorie": "Sandwichs",
+    "prix": 25.0,
+    "stock_actuel": 0,
+    "seuil_alerte": 5,
+    "image_path": null
+  }
+]

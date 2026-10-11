@@ -1,0 +1,1 @@
+import{n as e}from"./es6.BPoAupQG.js";export{e as FileSystemDirectoryHandle,e as default};

@@ -1,4 +1,4 @@
-#!/home/davinci/smart-kiosk-ensam/venv/bin/python3
+#!/home/davinci/smart-kiosk-ensam/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

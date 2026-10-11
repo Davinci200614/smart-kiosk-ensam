@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "nom_utilisateur": "admin",
+    "mot_de_passe_hash": "3c9f513df8e1c783fd07b0435d3c7e45$f932e61911f67c87dd425de65cc92647983a466ab99490256761fb5b807b0486",
+    "role": "Business Manager"
+  },
+  {
+    "id": 2,
+    "nom_utilisateur": "raul",
+    "mot_de_passe_hash": "83f1bdec9c4cb84e10e00eca17329d3c$b93db9c48c01cdbe2491ebdcb258db19f75193469aed6c6f761ddeef99accabe",
+    "role": "Kitchen Manager"
+  }
+]

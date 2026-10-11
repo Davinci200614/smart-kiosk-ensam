@@ -1,35 +1,23 @@
-from backend.database import SessionLocal, init_db
-from backend.models import Produit
+from backend.models_json import Produit
+from backend.storage_json import load_inventory, save_inventory
 
 def seed_produits():
-    # Ensure tables exist before injecting data
-    init_db()
-    
-    # Open a database session
-    db = SessionLocal()
-    
-    # Check if the database is already populated to avoid duplicates
-    if db.query(Produit).count() > 0:
-        print("Database already contains products. Skipping seed.")
-        db.close()
+    inventory = load_inventory()
+    if inventory:
+        print("JSON inventory already contains products. Skipping seed.")
         return
 
-    # Define mock buvette items
     menu_items = [
-        Produit(nom="Café Noir", categorie="Boissons", prix=5.0, stock_actuel=50, seuil_alerte=10),
-        Produit(nom="Thé à la Menthe", categorie="Boissons", prix=3.0, stock_actuel=100, seuil_alerte=20),
-        Produit(nom="Panini Poulet", categorie="Sandwichs", prix=25.0, stock_actuel=20, seuil_alerte=5),
-        Produit(nom="Tacos Viande Hachée", categorie="Sandwichs", prix=30.0, stock_actuel=15, seuil_alerte=5),
-        Produit(nom="Chips Lays", categorie="Snacks", prix=10.0, stock_actuel=40, seuil_alerte=10),
-        Produit(nom="Tarte au Citron", categorie="Desserts", prix=12.0, stock_actuel=10, seuil_alerte=3)
+        Produit(1, "Café Noir", "Boissons", 5.0, 50, 10),
+        Produit(2, "Thé à la Menthe", "Boissons", 3.0, 100, 20),
+        Produit(3, "Panini Poulet", "Sandwichs", 25.0, 20, 5),
+        Produit(4, "Tacos Viande Hachée", "Sandwichs", 30.0, 15, 5),
+        Produit(5, "Chips Lays", "Snacks", 10.0, 40, 10),
+        Produit(6, "Tarte au Citron", "Desserts", 12.0, 10, 3),
     ]
 
-    # Add all items to the staging area and commit to the SQLite file
-    db.add_all(menu_items)
-    db.commit()
-    print(f"Successfully added {len(menu_items)} products to the database.")
-    
-    db.close()
+    save_inventory(menu_items)
+    print(f"Successfully added {len(menu_items)} products to inventory.json.")
 
 if __name__ == "__main__":
     seed_produits()

@@ -30,8 +30,8 @@ Ce projet vise à concevoir une application complète permettant :
           └───────────┐   ┌───────────────┘
                       ▼   ▼
               ┌─────────────────┐       ┌──────────────────────┐
-              │ SQLite          │◄──────│ Analytics & Rapports │
-              │ (SQLAlchemy)    │       │ (Streamlit / Plotly) │
+              │ Fichiers JSON   │◄──────│ Analytics & Rapports │
+              │ (storage_json)  │       │ (Streamlit / Plotly) │
               └─────────────────┘       └──────────────────────┘
 ```
 
@@ -41,11 +41,16 @@ Ce projet vise à concevoir une application complète permettant :
 .
 ├── main.py                  # Point d'entrée (menu de lancement des modules)
 ├── requirements.txt
+├── setup.sh                 # Installation et lancement en une commande
 ├── backend/
-│   ├── models.py            # Modèles SQLAlchemy
-│   ├── database.py          # Engine, session, init_db
-│   ├── crud.py              # Logique métier (commandes, stocks, utilisateurs)
-│   └── seed.py              # Données initiales
+│   ├── models_json.py       # Modèles Python sérialisables en JSON
+│   ├── storage_json.py      # Lecture/écriture des données JSON
+│   ├── crud.py              # Création des commandes et tickets QR
+│   ├── auth_json.py         # Authentification des managers
+│   ├── seed.py              # Données initiales de l'inventaire
+│   ├── inventory.json       # Produits et stocks
+│   ├── transactions.json    # Commandes et lignes de commande
+│   └── user.json            # Utilisateurs
 ├── frontend/
 │   ├── kiosk_ui.py          # Borne client
 │   └── manager_ui.py        # Caisse & suivi cuisine
@@ -81,82 +86,73 @@ Ce projet vise à concevoir une application complète permettant :
 | Composant | Technologie | Rôle |
 |---|---|---|
 | Langage | Python 3.10+ | Cœur du projet |
-| Interface graphique | CustomTkinter ou Flet | Interface tactile moderne, responsive et sobre |
+| Interface graphique | CustomTkinter | Borne client, caisse et suivi cuisine |
 | Dashboard analytics | Streamlit / Plotly | Visualisation fluide des données financières |
-| Base de données | SQLite + SQLAlchemy | ORM pour manipuler la base SQL locale |
+| Persistance | Fichiers JSON | Stockage local de l'inventaire, des commandes et des utilisateurs |
 | QR Code | `qrcode` & `Pillow` | Création des QR Codes des tickets |
-| Rapports PDF | `reportlab` | Reçus et bilans comptables |
-| Analyse de données | `pandas` & `matplotlib` | Traitement et agrégation des données financières |
+| Analyse de données | `pandas` | Traitement et agrégation des données financières |
 
-## 5. Schéma de la base de données (SQLite)
+## 5. Fichiers de données JSON
 
-| Table | Champs |
+| Fichier | Contenu |
 |---|---|
-| **Produit** | `id`, `nom`, `categorie`, `prix`, `stock_actuel`, `seuil_alerte`, `image_path` |
-| **Commande** | `id`, `date_heure`, `statut`, `total`, `mode_paiement`, `qr_code_path` |
-| **LigneCommande** | `id`, `commande_id`, `produit_id`, `quantite`, `prix_unitaire` |
-| **Utilisateur** | `id`, `nom_utilisateur`, `mot_de_passe_hash`, `role` (*Admin* / *Caissier*) |
+| `inventory.json` | Produits, catégories, prix, stock et seuils d'alerte |
+| `transactions.json` | Commandes et lignes de commande |
+| `user.json` | Utilisateurs managers et mots de passe hachés |
+| `refill_requests.json` | Demandes de réapprovisionnement |
 
-Relations : `Commande 1—N LigneCommande N—1 Produit`.
+Les modèles de [`backend/models_json.py`](backend/models_json.py) sont convertis
+en dictionnaires avant d'être écrits par [`backend/storage_json.py`](backend/storage_json.py).
+Les tickets QR sont générés dans `backend/qrcodes/`.
 
 ## 6. Installation et lancement
 
 ```bash
 
-# 1. run setup.sh (runing the venv + install the dependecies)
+# Préparer l'environnement, initialiser les données JSON et ouvrir le lanceur
 chmod +x setup.sh
 ./setup.sh
 
-# 2. Créer la base et injecter les données initiales
-python -m backend.seed
-
-# 3. Ouvrir le lanceur graphique (depuis la racine du projet)
-python main.py
-
-# Ou lancer directement un module
-python main.py kiosk                 # Borne client
-python main.py manager               # Caisse & suivi cuisine
-python main.py dashboard             # Dashboard financier
-
-`main.py` charge le fichier `.env` (si présent), configure la connexion SQLAlchemy
-une seule fois, crée les tables manquantes, puis lance l'interface sélectionnée.
-Définissez `DATABASE_URL` dans `.env` pour remplacer la base SQLite locale
-(`sqlite:///buvette.db`).
+# Ou lancer directement une interface (la venv est utilisée automatiquement)
+./setup.sh kiosk                 # Borne client
+./setup.sh manager               # Caisse & suivi cuisine
+./setup.sh dashboard             # Dashboard financier
 ```
+
+`setup.sh` crée `venv/` si nécessaire, installe les dépendances, initialise
+`backend/inventory.json`, puis exécute `main.py` avec l'interpréteur de la
+machine virtuelle. Il n'est donc pas nécessaire d'activer la venv séparément.
 
 ### Dépendances (`requirements.txt`)
 
 ```
 customtkinter
-sqlalchemy
 qrcode
 pillow
 pandas
-matplotlib
 plotly
 streamlit
-reportlab
 ```
 
 ## 7. Répartition des tâches
 
 | Membre | Rôle | Sem. 1 | Sem. 2 | Sem. 3 |
 |---|---|---|---|---|
-| **1** | Frontend client (borne tactile) | Maquettage UI/UX, catalogue interactif | Panier dynamique, quantités, récapitulatif | Confirmation, QR Code, intégration BDD |
-| **2** | Backend, BDD & logique métier | Modélisation BDD, SQLAlchemy, données initiales | CRUD, stocks, commandes, transactions | Synchronisation borne-caisse, erreurs, cas limites |
-| **3** | Caisse, cuisine & module financier | Écran Suivi Cuisine, statuts | Administration des stocks, seuils d'alerte | Dashboard financier, pandas/matplotlib, rapports PDF |
+| **1** | Frontend client (borne tactile) | Maquettage UI/UX, catalogue interactif | Panier dynamique, quantités, récapitulatif | Confirmation, QR Code, intégration JSON |
+| **2** | Backend, données & logique métier | Modèles JSON, données initiales | CRUD, stocks, commandes, transactions | Synchronisation borne-caisse, erreurs, cas limites |
+| **3** | Caisse, cuisine & module financier | Écran Suivi Cuisine, statuts | Administration des stocks, seuils d'alerte | Dashboard financier, pandas/Plotly, rapports |
 
 ## 8. Planning prévisionnel
 
 | Période | Objectifs |
 |---|---|
-| **Semaine 1** | Modélisation BDD, maquettes UI Borne & Caisse, structure du projet |
-| **Semaine 2** | Connexion Borne-BDD, décrémentation du stock, écran Suivi Cuisine |
+| **Semaine 1** | Modèles JSON, maquettes UI Borne & Caisse, structure du projet |
+| **Semaine 2** | Connexion Borne-inventaire JSON, décrémentation du stock, écran Suivi Cuisine |
 | **Semaine 3** | Dashboard financier, génération QR/PDF, tests d'intégration, soutenance |
 
 ### Jalons de livraison
 
-1. **Fin semaine 1** : base de données fonctionnelle et maquettes UI validées.
+1. **Fin semaine 1** : stockage JSON fonctionnel et maquettes UI validées.
 2. **Fin semaine 2** : parcours de commande complet (de la sélection au suivi en cuisine).
 3. **Fin semaine 3** : projet finalisé et testé, tableaux de bord et support de présentation prêts.
 
@@ -168,13 +164,13 @@ Légende : ✅ fait · 🟡 partiel · ❌ à faire
 
 | Exigence | État | Remarque |
 |---|---|---|
-| Schéma des 4 tables | ✅ | Conforme au cahier des charges |
-| Données initiales (seed) | ✅ | 6 produits, 4 catégories |
-| Création de commande transactionnelle | ✅ | Lignes + total + rollback en cas d'erreur |
-| Décrémentation automatique du stock | 🟡 | Fonctionne, mais aucune vérification du stock disponible (stock négatif possible) |
-| Génération du QR Code | 🟡 | Image créée, mais jamais affichée au client |
-| Gestion des utilisateurs (Admin / Caissier) | ❌ | Table présente, aucune authentification |
-| Gestion des erreurs et cas limites | 🟡 | Seulement `print` + rollback |
+| Modèles et stockage JSON | ✅ | Inventaire, transactions, utilisateurs et demandes de réapprovisionnement |
+| Données initiales (seed) | ✅ | Inventaire initial chargé dans `inventory.json` |
+| Création de commande | ✅ | Lignes, total et persistance dans `transactions.json` |
+| Décrémentation automatique du stock | ✅ | Vérification du stock disponible avant l'écriture |
+| Génération du QR Code | ✅ | Ticket enregistré dans `backend/qrcodes/` et chemin sauvegardé |
+| Gestion des utilisateurs (Admin / Caissier) | ✅ | Authentification JSON des managers |
+| Gestion des erreurs et cas limites | 🟡 | Erreurs métier gérées, couverture de tests à renforcer |
 
 ### Module 1 — Borne client
 
@@ -202,15 +198,16 @@ Légende : ✅ fait · 🟡 partiel · ❌ à faire
 
 | Exigence | État | Remarque |
 |---|---|---|
-| Dashboard (CA par jour/heure, pointes, top produits) | ❌ | `dashboard.py` vide |
+| Dashboard (CA par jour/heure, pointes, top produits) | 🟡 | Dashboard Streamlit connecté aux transactions JSON |
 | Export PDF / CSV | ❌ | |
 
 ### Projet
 
 | Exigence | État | Remarque |
 |---|---|---|
-| `requirements.txt` | ❌ | Vide |
-| `main.py` | ❌ | Vide |
+| `requirements.txt` | ✅ | Dépendances de l'application déclarées |
+| `main.py` | ✅ | Lanceur graphique et lancement direct des interfaces |
+| `setup.sh` | ✅ | Installation, seed JSON et lancement en une commande |
 | Tests d'intégration | ❌ | |
 
 ## 10. Pistes d'amélioration identifiées

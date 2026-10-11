@@ -1,71 +1,53 @@
-import os
+from __future__ import annotations
+
+from collections.abc import Sequence
+from pathlib import Path
+
 import qrcode
-from sqlalchemy.orm import Session
-from backend.models import Commande, LigneCommande, Produit
 
-# Ensure a directory exists to store the generated tickets
-if not os.path.exists("qrcodes"):
-    os.makedirs("qrcodes")
+from backend.models_json import Commande, Produit
+from backend.storage_json import (
+    create_commande as create_json_commande,
+    load_transactions,
+    save_transactions,
+)
 
-def create_commande(db: Session, panier: list, mode_paiement: str = "Espèces"):
-    if not panier:
-        print("Le panier est vide.")
+QR_CODES_DIR = Path(__file__).resolve().parent / "qrcodes"
+
+
+def create_commande(
+    panier: Sequence[Produit],
+    mode_paiement: str = "Espèces",
+) -> Commande | None:
+    """Create an order in the JSON database and generate its QR ticket.
+
+    Inventory, orders, and order lines are persisted by ``storage_json``.
+    The optional QR ticket path is then written back to the same JSON record.
+    """
+    order = create_json_commande(panier, mode_paiement)
+    if order is None:
         return None
 
-    try:
-        # 1. Group items by ID
-        lignes_data = {}
-        total_commande = 0.0
-        
-        for item in panier:
-            total_commande += item.prix
-            if item.id in lignes_data:
-                lignes_data[item.id]['quantite'] += 1
-            else:
-                lignes_data[item.id] = {'produit': item, 'quantite': 1}
+    QR_CODES_DIR.mkdir(parents=True, exist_ok=True)
+    qr_filename = f"qrcodes/ticket_cmd_{order.id}.png"
+    qr_path = QR_CODES_DIR / f"ticket_cmd_{order.id}.png"
+    qr_data = (
+        f"ENSAM Buvette\nCommande: #{order.id}\n"
+        f"Total: {order.total} DH\nStatut: {order.statut}"
+    )
+    qrcode.make(qr_data).save(qr_path)
 
-        # 2. Create the parent order
-        nouvelle_commande = Commande(
-            total=total_commande,
-            mode_paiement=mode_paiement,
-            statut="En attente"
+    commandes, lignes = load_transactions()
+    saved_order = next(
+        (commande for commande in commandes if commande.id == order.id),
+        None,
+    )
+    if saved_order is None:
+        raise RuntimeError(
+            f"La commande #{order.id} est introuvable dans transactions.json."
         )
-        db.add(nouvelle_commande)
-        db.flush() 
 
-        # 3. Create lines and decrement stock
-        for prod_id, data in lignes_data.items():
-            qte = data['quantite']
-            db_produit = db.query(Produit).filter(Produit.id == prod_id).first()
-            if db_produit:
-                db_produit.stock_actuel -= qte
-                nouvelle_ligne = LigneCommande(
-                    commande_id=nouvelle_commande.id,
-                    produit_id=prod_id,
-                    quantite=qte,
-                    prix_unitaire=db_produit.prix
-                )
-                db.add(nouvelle_ligne)
-
-        # 4. Commit the initial transaction to lock in the ID
-        db.commit()
-        db.refresh(nouvelle_commande)
-        
-        # 5. Generate and save the QR Code
-        qr_data = f"ENSAM Buvette\nCommande: #{nouvelle_commande.id}\nTotal: {total_commande} DH\nStatut: {nouvelle_commande.statut}"
-        qr = qrcode.make(qr_data)
-        
-        qr_filename = f"qrcodes/ticket_cmd_{nouvelle_commande.id}.png"
-        qr.save(qr_filename)
-        
-        # 6. Update the order with the image path and commit again
-        nouvelle_commande.qr_code_path = qr_filename
-        db.commit()
-
-        print(f"Succès: Commande #{nouvelle_commande.id} enregistrée. Ticket généré: {qr_filename}")
-        return nouvelle_commande
-
-    except Exception as e:
-        db.rollback()
-        print(f"Erreur lors de la transaction: {e}")
-        return None
+    saved_order.qr_code_path = qr_filename
+    save_transactions(commandes, lignes)
+    order.qr_code_path = qr_filename
+    return order

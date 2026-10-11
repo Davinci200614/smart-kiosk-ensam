@@ -1,9 +1,8 @@
 import customtkinter as ctk
-from backend.database import SessionLocal
-from backend.models import Commande, LigneCommande
+from backend.storage_json import get_active_commandes, update_commande_status
 
 class ManagerApp(ctk.CTk):
-    def __init__(self):
+    def __init__(self, manager_username, manager_role="Manager"):
         super().__init__()
         self.title("Smart Kiosk - Écran Cuisine (KDS)")
         self.geometry("900x600")
@@ -17,14 +16,27 @@ class ManagerApp(ctk.CTk):
         
         self.header_label = ctk.CTkLabel(self.header_frame, text="Suivi des Commandes - Cuisine", font=("Arial", 24, "bold"))
         self.header_label.pack(pady=15)
+        self.manager_label = ctk.CTkLabel(
+            self.header_frame,
+            text=f"{manager_role} connecté : {manager_username}",
+            font=("Arial", 13),
+        )
+        self.manager_label.pack(pady=(0, 10))
+        self.logout_button = ctk.CTkButton(
+            self.header_frame,
+            text="Se déconnecter",
+            width=130,
+            command=self.logout,
+        )
+        self.logout_button.pack(pady=(0, 10))
         
         # Scrollable container for active orders
         self.orders_frame = ctk.CTkScrollableFrame(self, label_text="Commandes Actives")
         self.orders_frame.grid(row=1, column=0, padx=20, pady=20, sticky="nsew")
         
-        # Tracking variables to prevent flickering
+        # Keep widgets alive so a status change does not rebuild the whole list.
         self.refresh_job = None
-        self.current_state = {}  # Tracks {order_id: status}
+        self.order_cards = {}
         
         # Load orders immediately and start the auto-refresh loop
         self.load_orders()
@@ -35,61 +47,102 @@ class ManagerApp(ctk.CTk):
         if self.refresh_job is not None:
             self.after_cancel(self.refresh_job)
             
-        db = SessionLocal()
-        commandes = db.query(Commande).filter(Commande.statut != "Servie").all()
-        
-        # Create a "snapshot" of the database's current state
-        new_state = {cmd.id: cmd.statut for cmd in commandes}
-        
-        # Only wipe and rebuild the UI if the snapshot is different from what's on screen
-        if new_state != self.current_state:
-            for widget in self.orders_frame.winfo_children():
-                widget.destroy()
-                
-            for i, cmd in enumerate(commandes):
-                card = ctk.CTkFrame(self.orders_frame, corner_radius=10)
-                card.grid(row=i, column=0, padx=10, pady=10, sticky="ew")
-                self.orders_frame.grid_columnconfigure(0, weight=1)
-                
-                status_color = "orange" if cmd.statut == "En attente" else "blue"
-                info_label = ctk.CTkLabel(card, text=f"Commande #{cmd.id} | {cmd.statut}", 
-                                          font=("Arial", 18, "bold"), text_color=status_color)
-                info_label.pack(anchor="w", padx=20, pady=(10, 0))
-                
-                lignes = db.query(LigneCommande).filter(LigneCommande.commande_id == cmd.id).all()
-                details_text = "\n".join([f"• {l.quantite}x {l.produit.nom}" for l in lignes])
-                
-                details_label = ctk.CTkLabel(card, text=details_text, font=("Arial", 16), justify="left")
-                details_label.pack(anchor="w", padx=40, pady=10)
-                
-                btn_text = "Lancer la préparation" if cmd.statut == "En attente" else "Marquer comme Servie"
-                btn_color = "orange" if cmd.statut == "En attente" else "green"
-                
-                action_btn = ctk.CTkButton(card, text=btn_text, fg_color=btn_color, font=("Arial", 14, "bold"),
-                                           command=lambda c_id=cmd.id, s=cmd.statut: self.update_status(c_id, s))
-                action_btn.pack(side="right", padx=20, pady=10)
-                
-            # Save the new snapshot as the current state
-            self.current_state = new_state
-            
-        db.close()
-        
+        active_orders = get_active_commandes()
+        active_ids = {commande.id for commande, _ in active_orders}
+
+        # Remove only orders that are no longer active.
+        for order_id in set(self.order_cards) - active_ids:
+            self.order_cards.pop(order_id)["card"].destroy()
+
+        for row, (commande, lignes) in enumerate(active_orders):
+            self._render_order_card(row, commande, lignes)
+
         # Schedule the next background check
         self.refresh_job = self.after(5000, self.load_orders)
+
+    def _render_order_card(self, row, commande, lignes):
+        """Create a card once, then update its contents in place."""
+        card_data = self.order_cards.get(commande.id)
+        if card_data is None:
+            card = ctk.CTkFrame(self.orders_frame, corner_radius=10)
+            info_label = ctk.CTkLabel(
+                card,
+                font=("Arial", 18, "bold"),
+            )
+            info_label.pack(anchor="w", padx=20, pady=(10, 0))
+
+            details_label = ctk.CTkLabel(
+                card,
+                font=("Arial", 16),
+                justify="left",
+            )
+            details_label.pack(anchor="w", padx=40, pady=10)
+
+            action_btn = ctk.CTkButton(
+                card,
+                font=("Arial", 14, "bold"),
+            )
+            action_btn.pack(side="right", padx=20, pady=10)
+
+            card_data = {
+                "card": card,
+                "info": info_label,
+                "details": details_label,
+                "button": action_btn,
+            }
+            self.order_cards[commande.id] = card_data
+
+        card_data["card"].grid(
+            row=row,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky="ew",
+        )
+        self.orders_frame.grid_columnconfigure(0, weight=1)
+
+        status_color = "orange" if commande.statut == "En attente" else "blue"
+        card_data["info"].configure(
+            text=f"Commande #{commande.id} | {commande.statut}",
+            text_color=status_color,
+        )
+        details_text = "\n".join(
+            f"• {line.quantite}x {product.nom if product else 'Produit supprimé'}"
+            for line, product in lignes
+        )
+        card_data["details"].configure(text=details_text)
+
+        button = card_data["button"]
+        if commande.statut == "En attente":
+            button.configure(
+                text="Lancer la préparation",
+                fg_color="orange",
+                hover_color="#cc8400",
+                command=lambda order_id=commande.id: self.update_status(
+                    order_id,
+                    "En attente",
+                ),
+            )
+        else:
+            button.configure(
+                text="Marquer comme Servie",
+                fg_color="green",
+                hover_color="#167a16",
+                command=lambda order_id=commande.id: self.update_status(
+                    order_id,
+                    "En préparation",
+                ),
+            )
         
     def update_status(self, cmd_id, current_status):
         """Updates the order status in the database and forces an immediate UI refresh."""
-        db = SessionLocal()
-        cmd = db.query(Commande).filter(Commande.id == cmd_id).first()
-        
-        if cmd:
-            if current_status == "En attente":
-                cmd.statut = "En préparation"
-            elif current_status == "En préparation":
-                cmd.statut = "Servie"
-            db.commit()
-            
-        db.close()
+        update_commande_status(cmd_id, current_status)
         
         # Force a refresh right after a button click
         self.load_orders()
+
+    def logout(self):
+        """Stop refresh callbacks and close the authenticated manager window."""
+        if self.refresh_job is not None:
+            self.after_cancel(self.refresh_job)
+        self.destroy()

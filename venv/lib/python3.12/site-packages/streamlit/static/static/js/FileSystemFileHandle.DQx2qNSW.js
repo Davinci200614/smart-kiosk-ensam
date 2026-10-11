@@ -1,0 +1,1 @@
+import{t as e}from"./es6.BPoAupQG.js";export{e as FileSystemFileHandle,e as default};

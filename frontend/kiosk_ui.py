@@ -1,7 +1,6 @@
-from backend.crud import create_commande
 import customtkinter as ctk
-from backend.database import SessionLocal
-from backend.models import Produit
+from backend.crud import create_commande
+from backend.storage_json import load_inventory
 
 class KioskApp(ctk.CTk):
     def __init__(self):
@@ -29,11 +28,8 @@ class KioskApp(ctk.CTk):
         self.load_products()
 
     def load_products(self):
-        """Fetches products from SQLite and creates a button for each."""
-        db = SessionLocal()
-        produits = db.query(Produit).all()
-        db.close()
-        
+        """Fetch products from the JSON inventory and create a button for each."""
+        produits = load_inventory()
         for i, p in enumerate(produits):
             # Using lambda with default argument captures the specific product 'p' for each button
             btn = ctk.CTkButton(self.menu_frame, text=f"{p.nom} - {p.prix} DH", 
@@ -81,14 +77,14 @@ class KioskApp(ctk.CTk):
             print("Panier vide, validation annulée.")
             return
 
-        db = SessionLocal()
-        # Call the CRUD function to save the order
-        commande = create_commande(db, self.panier, mode_paiement="Espèces")
-        db.close()
+        try:
+            commande = create_commande(self.panier, mode_paiement="Espèces")
+        except ValueError as error:
+            print(f"Commande refusée: {error}")
+            return
 
-        if commande:
+        if commande is not None:
             # Clear the cart memory
-            self.panier.append(None) # hack to trigger update before clearing list if needed, or just clear
             self.panier = []
             self.total = 0.0
             

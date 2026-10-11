@@ -1,18 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-echo "Creating virtual environment..."
-python3 -m venv venv
+set -euo pipefail
 
-echo "Activating virtual environment..."
-source venv/bin/activate
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+VENV_DIR="${PROJECT_ROOT}/venv"
+PYTHON="${VENV_DIR}/bin/python"
 
-echo "Upgrading pip..."
-pip install --upgrade pip
+cd "${PROJECT_ROOT}"
 
-echo "Installing requirements..."
-pip install -r requirements.txt
+if [[ ! -x "${PYTHON}" ]]; then
+    echo "Creating virtual environment..."
+    python3 -m venv "${VENV_DIR}"
+fi
 
-echo "Initializing database..."
-python3 backend/seed.py
+echo "Installing dependencies..."
+"${PYTHON}" -m pip install --upgrade pip
+"${PYTHON}" -m pip install -r requirements.txt
 
-echo "Setup complete! Remember to run 'source venv/bin/activate' before starting your app."
+echo "Initializing JSON data..."
+"${PYTHON}" -m backend.seed
+
+echo "Starting Smart Kiosk..."
+exec "${PYTHON}" main.py "$@"
