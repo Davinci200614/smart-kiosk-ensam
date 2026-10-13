@@ -28,7 +28,7 @@ def create_commande(
     if order is None:
         return None
 
-    QR_CODES_DIR.mkdir(parents=True, exist_ok=True)
+    QR_CODES_DIR.mkdir(exist_ok=True)
     qr_filename = f"qrcodes/ticket_cmd_{order.id}.png"
     qr_path = QR_CODES_DIR / f"ticket_cmd_{order.id}.png"
     qr_data = (
@@ -38,10 +38,13 @@ def create_commande(
     qrcode.make(qr_data).save(qr_path)
 
     commandes, lignes = load_transactions()
-    saved_order = next(
-        (commande for commande in commandes if commande.id == order.id),
-        None,
-    )
+    saved_order = None
+    
+    for commande in commandes:
+      if commande.id == order.id:
+        saved_order = commande
+        break
+    
     if saved_order is None:
         raise RuntimeError(
             f"La commande #{order.id} est introuvable dans transactions.json."

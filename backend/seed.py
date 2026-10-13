@@ -33,9 +33,9 @@ MENU_ITEMS = (
 
 def seed_produits() -> None:
     """Populate JSON inventory with the default menu if needed."""
-    inventory = load_inventory()
+    existing_inventory = load_inventory()
     menu_names = {name for name, _, _ in MENU_ITEMS}
-    inventory = [product for product in inventory if product.nom in menu_names]
+    inventory = [product for product in existing_inventory if product.nom in menu_names]
     products_by_name = {product.nom: product for product in inventory}
 
     for nom, categorie, prix in MENU_ITEMS:

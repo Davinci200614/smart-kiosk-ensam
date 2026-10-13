@@ -4,7 +4,7 @@
     "nom": "Sandwich Bocadillos",
     "categorie": "🍽️ Plats",
     "prix": 28.0,
-    "stock_actuel": 47,
+    "stock_actuel": 44,
     "seuil_alerte": 5,
     "image_path": null
   },
@@ -13,7 +13,7 @@
     "nom": "Sandwich Kefta",
     "categorie": "🍽️ Plats",
     "prix": 32.0,
-    "stock_actuel": 44,
+    "stock_actuel": 41,
     "seuil_alerte": 5,
     "image_path": null
   },
@@ -31,7 +31,7 @@
     "nom": "Sandwich Merguez",
     "categorie": "🍽️ Plats",
     "prix": 30.0,
-    "stock_actuel": 45,
+    "stock_actuel": 44,
     "seuil_alerte": 5,
     "image_path": null
   },
@@ -49,7 +49,7 @@
     "nom": "Harcha Farcie",
     "categorie": "🍽️ Plats",
     "prix": 18.0,
-    "stock_actuel": 50,
+    "stock_actuel": 48,
     "seuil_alerte": 5,
     "image_path": null
   },
@@ -130,7 +130,7 @@
     "nom": "Jus d'Orange",
     "categorie": "🥤 Boissons",
     "prix": 15.0,
-    "stock_actuel": 50,
+    "stock_actuel": 49,
     "seuil_alerte": 5,
     "image_path": null
   },

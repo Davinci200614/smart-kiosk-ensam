@@ -19,7 +19,7 @@
     {
       "id": 35,
       "date_heure": "2026-10-11T22:35:48",
-      "statut": "En attente",
+      "statut": "Servie",
       "total": 56.0,
       "mode_paiement": "Espèces",
       "qr_code_path": "qrcodes/ticket_cmd_35.png"
@@ -43,7 +43,7 @@
     {
       "id": 38,
       "date_heure": "2026-10-11T22:40:39",
-      "statut": "En attente",
+      "statut": "Servie",
       "total": 112.0,
       "mode_paiement": "Espèces",
       "qr_code_path": "qrcodes/ticket_cmd_38.png"
@@ -51,7 +51,7 @@
     {
       "id": 39,
       "date_heure": "2026-10-11T22:54:06",
-      "statut": "En attente",
+      "statut": "Servie",
       "total": 201.0,
       "mode_paiement": "Espèces",
       "qr_code_path": "qrcodes/ticket_cmd_39.png"
@@ -71,6 +71,46 @@
       "total": 72.0,
       "mode_paiement": "Espèces",
       "qr_code_path": "qrcodes/ticket_cmd_41.png"
+    },
+    {
+      "id": 42,
+      "date_heure": "2026-10-12T14:10:08",
+      "statut": "En attente",
+      "total": 80.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_42.png"
+    },
+    {
+      "id": 43,
+      "date_heure": "2026-10-12T15:27:11",
+      "statut": "En attente",
+      "total": 18.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_43.png"
+    },
+    {
+      "id": 44,
+      "date_heure": "2026-10-12T15:28:52",
+      "statut": "En attente",
+      "total": 28.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_44.png"
+    },
+    {
+      "id": 45,
+      "date_heure": "2026-10-12T15:38:14",
+      "statut": "En attente",
+      "total": 79.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_45.png"
+    },
+    {
+      "id": 46,
+      "date_heure": "2026-10-12T16:24:57",
+      "statut": "En attente",
+      "total": 56.0,
+      "mode_paiement": "Espèces",
+      "qr_code_path": "qrcodes/ticket_cmd_46.png"
     }
   ],
   "lignes": [
@@ -171,6 +211,62 @@
       "produit_id": 12,
       "quantite": 4,
       "prix_unitaire": 8.0
+    },
+    {
+      "id": 57,
+      "commande_id": 42,
+      "produit_id": 5,
+      "quantite": 1,
+      "prix_unitaire": 32.0
+    },
+    {
+      "id": 58,
+      "commande_id": 42,
+      "produit_id": 7,
+      "quantite": 1,
+      "prix_unitaire": 30.0
+    },
+    {
+      "id": 59,
+      "commande_id": 42,
+      "produit_id": 9,
+      "quantite": 1,
+      "prix_unitaire": 18.0
+    },
+    {
+      "id": 60,
+      "commande_id": 43,
+      "produit_id": 9,
+      "quantite": 1,
+      "prix_unitaire": 18.0
+    },
+    {
+      "id": 61,
+      "commande_id": 44,
+      "produit_id": 4,
+      "quantite": 1,
+      "prix_unitaire": 28.0
+    },
+    {
+      "id": 62,
+      "commande_id": 45,
+      "produit_id": 5,
+      "quantite": 2,
+      "prix_unitaire": 32.0
+    },
+    {
+      "id": 63,
+      "commande_id": 45,
+      "produit_id": 18,
+      "quantite": 1,
+      "prix_unitaire": 15.0
+    },
+    {
+      "id": 64,
+      "commande_id": 46,
+      "produit_id": 4,
+      "quantite": 2,
+      "prix_unitaire": 28.0
     }
   ]
 }
